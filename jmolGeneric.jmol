@@ -307,7 +307,7 @@ function setPropertySeqresno(modID){
 	}
 	else{
 		var allseqres = getAllSeqFromSEQRES(modID);									 
-        var atomset = {model =  @modID and !solvent and !ligand};		
+        var atomset = {model =  @modID and !solvent and !ligand};
 		var i_seqres = 0;						
         var i_chain = 0;						
 		var seqCode = "";						 
@@ -315,7 +315,7 @@ function setPropertySeqresno(modID){
 		var atom_chain = "";
         
         for (var i=1; i<=atomset.length; i++){
-			if (atom_chain != atomset[i].chain){		
+			if (atom_chain != atomset[i].chain){	
 				atom_chain = atomset[i].chain;
 				i_chain = 0;						
 			}
@@ -332,134 +332,43 @@ function setPropertySeqresno(modID){
 			}
 			atomset[i].property_seqresno = i_chain;										
         }
-        print ("Nouvelle property_seqresno ajouté pour le modele "+modID+"  (°L°) ");
+        print ("Nouvelle property_seqresno définie pour le modele "+modID+"  (°l°) ");
         //return atomset;
 	}
 }
 
-/*définir, pour chaque résidu de la structure, une nouvelle propriété atomique property_qresno
-  correspondant au numéro du résidu de la séquence requête avec lequel le résidu a été aligné. */
 
+/* =================================================================
+Fonctions pour tester  property_seqresno UNIQUEMENT sur 1a2c.pdb  */
 
-
-	/*query = "MSTHRRLIQRVERKLESTVGDAFARIFGGSIVPQEVEALLRREAADGIQSLQGNRLLAPNEYIITLGVHDYEKMKADPHLTSTGFARDLADYIQEQGWQTYGDVVVRFEQSSNLHTGQFRARGTVNPDVETRPPVIDPVRPQSNHAFGAEPGVAPMSDNSSYRGGQGQGRPDEYYDDRYARPQEDPRGGPDPQGGSDPRGGYPPETGGYPPQPGYPRPRHPDQGDYPEQIGYPDQGGYPEQRGYPEQRGYPDQRGYQDQGRGYPDQGQGGYPPPYEQRPPVSPGPAAGYGAPGYDQGYRQSGGYGPSPGGGQPGYGGYGEYGRGPARHEEGSYVPSGPPGPPEQRPAYPDQGGYDQGYQQGATTYGRQDYGGGADYTRYTESPRVPGYAPQGGGYAEPAGRDYDYGQSGAPDYGQPAPGGYSGYGQGGYGSAGTSAYLRRDRAGSWWYLLASCENTAGRGFDSDIRLVDVTVSRNHAEIKQNGGEYIIMDVNSTNGTYVQGARVNSVRIHDGDHIQLGKFEFEVRAG" ;
-
-	Hit_def        = "Chain A, Crystal Structure Of The Fhaa Fha Domain Complexed With The Intracellular Domain Of Rv3910" ;
-	Hit_PDB_ID     = "3OUN" ;
-	Hit_chain      = "A" ;
-	Hsp_score      = "237" ;
-	Hsp_Evalue     = "1.26809e-25" ;
-	Hsp_query_from = "434" ;
-	Hsp_query_to   = "525" ;
-	Hsp_hit_from   = "66" ;
-	Hsp_hit_to     = "157" ;
-	Hsp_identity   = "40" ;
-	Hsp_positive   = "55" ;
-	Hsp_gaps       = "0" ;
-	Hsp_align_len  = "92" ;
-	Hsp_qseq       = "TSAYLRRDRAGSWWYLLASCENTAGRGFDSDIRLVDVTVSRNHAEIKQNGGEYIIMDVNSTNGTYVQGARVNSVRIHDGDHIQLGKFEFEVR" ;
-	Hsp_midline    = "TS  L  D      Y L +++N  GRG D + RL+D  VSR H EI++ G      D+NSTNGT V++A+V +    DGD+I LG+ E+ VR" ;
-	Hsp_hseq       = "TSVTLQLDDGSGRTYQLREGSNIIGRGQDAQFRLPDTGVSRRHLEIRWDGQVALLADLNSTNGTTVNNAPVQEWQLADGDVIRLGHSEIIVR" ;*/
-
-
-function setPropertyQresno(blast_file){
-
-	
-	var activModel = _modelNumber;
-	
-	script @blast_file;	 
-
-	// Récupération des variables du fichier blast
-	var query = query;	
-	var hsp_query_from = 0+Hsp_query_from;
-	var hsp_hit_from = 0+Hsp_hit_from;
-	var hsp_hit_to = 0+Hsp_hit_to;
-
-	// récupération de la sequence requette et de la sequence du Hit 
-	var hsp_qseqList = splitString(Hsp_qseq,1);
-	var hsp_midlineList= splitString(Hsp_midline,1);
-	var hsp_hseqList = splitString(Hsp_hseq,1);
-
-	
-	var pdbFile = toLowerCase(Hit_PDB_ID)+'.pdb'
-	load @pdbFile;
-
-	// Récupération des N° du fichier
-	model all;
-	b=_modelNumber;
-	fileNum = b.split('.')[1];
-	// Récupération des N° des modeles 
-	lastModelNum = 	b.split('.')[3];	 
-	
-	
-	// Recherches des modeles
-	for (var modelNum = 1 ; modelNum<=lastModelNum;modelNum++){
-		var modelID = fileNum+'.'+modelNum;
-		//print"le fichier chargé est: "=pdbFile;
-		print " Traitement du Modele N°: "+modelID;
-		// Appel de  setPropertySeqresno()
-		setPropertySeqresno(modelID);
-		// Creation des listes des atomes		
-		var atomset = {model=@modelID and !solvent and !ligand};
-		
-		// Index
-		var resIndex_inQuery = 0;
-		var progressIndex = 1;	
-		var i =1;
-		
-		while(i<=atomset.length){
-			if (atomset[i].property_seqresno!=atomset[i-1].property_seqresno){
-				if (atomset[i].property_seqresno<hsp_hit_from || atomset[i].property_seqresno>hsp_hit_to){				
-					atomset[i].property_qsimil = -1;
-					atomset[i].property_qresno = -1;
-					i++;
-
-				}else{
-					switch(hsp_midlineList[progressIndex]){
-
-						case '+':
-							atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery));
-							atomset[i].property_qsimil = 1;
-							resIndex_inQuery++;
-							i++;
-							
-							break;
-
-						default:
-							atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery));
-							atomset[i].property_qsimil = 2;
-							resIndex_inQuery++;
-							i++;
-							break;
-
-						case ' ':
-							if (hsp_hseqList[progressIndex]!='-'){
-								atomset[i].property_qsimil = 0;
-								if (hsp_qseqList[progressIndex]!='-'){						
-									atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery)); 
-									resIndex_inQuery++;
-								}
-								else{
-									atomset[i].property_qresno=0;
-								}
-								i++;
-							}else{
-								resIndex_inQuery++;
-							}
-							break;
-					}
-					progressIndex++;			
-				}		
-			}
-			else{
-				atomset[i].property_qsimil = atomset[i-1].property_qsimil;
-				atomset[i].property_qresno = atomset[i-1].property_qresno;
-				i++;
-			}
-		}
+//Sans property_seqresno
+function showSeqcode(modID){
+	if checkModID(modID){
+		model (@modID);
+		select all ; backbone -0.2 ;
+		select {chain="L"} ; color yellow ;
+		select {chain="H"} ; color green ;
+		select {chain="I"} ; color red ;
+		select {chain="J"} ; color cyan ;
+		select {(chain="L" or chain="I") and atomname ="CA"} ;
+		label %.0[seqcode]-%[group1] ;
 	}
-	model @activModel;	
 }
+//Avec property_seqresno
+function showSeqresno(modID){
+	setPropertySeqresno(modID);
+	select all ; backbone -0.2 ;
+	select {chain="L"} ; color yellow ;
+	select {chain="H"} ; color green ;
+	select {chain="I"} ; color red ;
+	select {chain="J"} ; color cyan ;
+	select {(chain="L" or chain="I") and atomname ="CA"} ;
+	label %.0[property_seqresno]-%[group1] ;
+}
+/*===============================================================*/
 
 
-print("Etudiez comme si vous deviez vivre toujours ; vivez comme si vous deviez mourir demain.");
+
+
+// Une fois chargée !
+print("script 'jmolGeneric.jmol' bien chargé.");
