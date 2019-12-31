@@ -301,6 +301,7 @@ function getAllSeqFromSEQRES(modID) {
 /*définir une nouvelle propriété atomique property_seqresno
   correspondant aux numéros séquentiels (à partir de 1) des résidus tels
   qu'ils apparaissent dans les enregistrement SEQRES */
+  
 function setPropertySeqresno(modID){
 	if (checkModID(modID) == false){
 		print (" /!\\ Modele "+modID+ "non reconnu !!! \n");
@@ -436,16 +437,6 @@ function setPropertyQresno(blast_file){
 	var hsp_qseqList = splitString(Hsp_qseq,1);
 	var hsp_midlineList= splitString(Hsp_midline,1);
 	var hsp_hseqList = splitString(Hsp_hseq,1);
-
-	// Récupération des N° du fichier
-	/*model all;
-	b=_modelNumber;
-	fileNum = b.split('.')[1];
-	// Récupération des N° des modeles 
-	lastModelNum = 	b.split('.')[3];
-	La récupération des modéles ne fonctionner pas bien car si on un seul
-	modéles ca ne marche pas donc on crée la fonction getAllmodel
-	*/	 
 
 	// Récupération des N° du fichier
 	fileNum = getAllModel()[0].split('.')[1];
