@@ -298,10 +298,11 @@ function getAllSeqFromSEQRES(modID) {
 
 
 /****************PROJET************************/
-/*définir une nouvelle propriété atomique property_seqresno
+/* PARTIE 1/4
+définir une nouvelle propriété atomique property_seqresno
   correspondant aux numéros séquentiels (à partir de 1) des résidus tels
   qu'ils apparaissent dans les enregistrement SEQRES */
-  
+
 function setPropertySeqresno(modID){
 	if (checkModID(modID) == false){
 		print (" /!\\ Modele "+modID+ "non reconnu !!! \n");
@@ -333,7 +334,7 @@ function setPropertySeqresno(modID){
 			}
 			atomset[i].property_seqresno = i_chain;										
         }
-        print ("Nouvelle property_seqresno définie pour le modele "+modID+"  (°l°) ");
+        print ("Nouvelle property_seqresno définie pour le modele "+modID+"  ! ");
         //return atomset;
 	}
 }
@@ -368,15 +369,15 @@ function showSeqresno(modID){
 }
 /*===============================================================*/
 
-// Début getAllModel
+
 function getAllModel(){	
 	first_LastModel = array();
-    model all;
+    model ALL;
     models_rang = _modelNumber;
     first_LastModel = models_rang.split(' - ');
     last_fileNumber = (first_LastModel[first_LastModel.length].split('.'))[1];
 	
-	list_models=array();
+	list_models = array();
 	for(var i = 1; i<=last_fileNumber; i++){
 		// To transfer to integer
         modID = 0+(i+'.0'); 
@@ -393,10 +394,10 @@ function getAllModel(){
 		}		
 	}		
 	return list_models;
-}	
-// Fin  getAllModel
+}
 
-/*définir, pour chaque résidu de la structure, une nouvelle propriété atomique property_qresno
+/* PARTIE 2/4
+définir, pour chaque résidu de la structure, une nouvelle propriété atomique property_qresno
   correspondant au numéro du résidu de la séquence requête avec lequel le résidu a été aligné. */
 
 
@@ -429,9 +430,9 @@ function setPropertyQresno(blast_file){
 	script @blast_file;	 
 
 	// Récupération des variables du fichier blast	
-	var hsp_query_from = 0+Hsp_query_from;
-	var hsp_hit_from = 0+Hsp_hit_from;
-	var hsp_hit_to = 0+Hsp_hit_to;
+	var hsp_query_from = Hsp_query_from;
+	var hsp_hit_from = Hsp_hit_from;
+	var hsp_hit_to = Hsp_hit_to;
 
 	// récupération de la sequence requette et de la sequence du Hit 
 	var hsp_qseqList = splitString(Hsp_qseq,1);
@@ -470,7 +471,7 @@ function setPropertyQresno(blast_file){
 					switch(hsp_midlineList[progressIndex]){
 
 						case '+':
-							atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery));
+							atomset[i].property_qresno = (hsp_query_from + resIndex_inQuery);
 							atomset[i].property_qsimil = 1;
 							resIndex_inQuery++;
 							i++;
@@ -478,7 +479,7 @@ function setPropertyQresno(blast_file){
 							break;
 
 						default:
-							atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery));
+							atomset[i].property_qresno = (hsp_query_from + resIndex_inQuery);
 							atomset[i].property_qsimil = 2;
 							resIndex_inQuery++;
 							i++;
@@ -488,7 +489,7 @@ function setPropertyQresno(blast_file){
 							if (hsp_hseqList[progressIndex]!='-'){
 								atomset[i].property_qsimil = 0;
 								if (hsp_qseqList[progressIndex]!='-'){						
-									atomset[i].property_qresno = (0+(hsp_query_from + resIndex_inQuery)); 
+									atomset[i].property_qresno = (hsp_query_from + resIndex_inQuery); 
 									resIndex_inQuery++;
 								}
 								else{
