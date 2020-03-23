@@ -6,7 +6,7 @@ A_AAA = ["A":"ALA","R":"ARG","D":"ASP","N":"ASN","C":"CYS","E":"GLU","Q":"GLN","
 
 
 
-// Exercice 1 — toUpperCase(), toLowerCase()
+// 1 — toUpperCase(), toLowerCase()
 // =========================================
 
 // fonction pour changer la casse en Maj
@@ -41,7 +41,7 @@ function toLowerCase(string) {
 
 
 
-/* Exercice 2 — tr3to1(), tr1to3()
+/* 2 — tr3to1(), tr1to3()
    ===============================
 fonction pour traduire un code de trois lettres (paramètre d'entrée) 
 en un code d'une lettre (valeur retournée).
@@ -97,7 +97,7 @@ function tr3to1(string) {
 
 
 
-/* Exercice 3 — getFileHeader()
+/* 3 — getFileHeader()
    ============================
 
  Écrire une fonction getFileHeader(modID) telle que :
@@ -128,7 +128,7 @@ function getFileHeader(modID) {
 }
 
 
-/* Exercice 4 — checkModID()
+/* 4 — checkModID()
    =========================
 
 Définir une fonction checkModID(modID)
@@ -144,7 +144,7 @@ function checkModID(modID) {
 }
 
 
-/* Exercice 5 — splitString()
+/* 5 — splitString()
    ==========================
    Définir une fonction splitString(string,length)
    pour couper une chaîne de caractères en morceaux de longueur fixe. */
@@ -170,7 +170,7 @@ function splitString(string,len) {
 }
 
 
-/* Exercice 6 — getSeqFromSEQRES()
+/* 6 — getSeqFromSEQRES()
    ===============================
     Définir une fonction getSeqFromSEQRES(modID,chainID) capable de retourner 
     la séquence d'acides aminés (codes d'une lettre) d'une chaîne à partir des 
@@ -222,7 +222,7 @@ function trimString(maChaine,char){
 }
 
 
-/* Exercice 7 — getMODRES()
+/* 7 — getMODRES()
    ========================
    Définir une fonction getMODRES(modID) capable de retourner, 
    à partir des enregistrements MODRES, les noms des résidus modifiés présents 
