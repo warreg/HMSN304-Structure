@@ -1,5 +1,5 @@
 # HMSN304-Structure
-## Autheurs : WADE Mouhamadou & MARONE Jean 
+## Autheurs : WADE Gérard & MARONE Jean 
 Le but de ce projet est de bien saisir le concept d’alignement de séquences protéiques
 sur des structures 3D connues. En effet, pour une séquence protéique donnée, dont
 la fonction et la structure sont inconnues, il faudra déterminer après une recherche et
